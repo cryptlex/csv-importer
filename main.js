@@ -8,35 +8,62 @@ const productId = 'PASTE_YOUR_PRODUCT_ID';
 
 const csvFilePath = 'sample.csv';
 
+async function createResource(url, resource) {
+    const response = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(resource),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+        }
+    });
+    if (response.status == 201) {
+        return await response.json();
+    } else {
+        console.error(response.status, resource, await response.json());
+    }
+}
+
 async function importCsv(filePath) {
     try {
         // read the csv file
         var csv = fs.readFileSync(filePath, 'utf8');
         // parse the csv file
-        const licenses = parse(csv, { columns: true });
-        for (let license of licenses) {
+        const rows = parse(csv, { columns: true });
+        for (let row of rows) {
             // set the productId
-            license.productId = productId;
-            license.metadata = [];
-
+            const licenseBody = {
+                key: row.key,
+                allowedActivations: row.allowedActivations,
+                // add more properties if needed
+                productId: productId,
+                metadata: []
+            }
             // assuming csv contains some order_id
-            if (license.order_id) {
-                license.metadata.push({ key: 'order_id', value: license.order_id, visible: false });
+            if (row.order_id) {
+                licenseBody.metadata.push({ key: 'order_id', value: row.order_id, visible: false });
             }
 
-            const response = await fetch(`${apiBaseUrl}/licenses`, {
-                method: 'POST',
-                body: JSON.stringify(license),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`
+            // check for user details in csv
+            if (row.email && row.firstName && row.lastName) {
+                const userBody = {
+                    email: row.email,
+                    firstName: row.firstName,
+                    lastName: row.lastName,
+                    password: 'top_secret', // add your logic for password generation
+                    roles: ['user']
                 }
-            });
-            if (response.status == 201) {
-                console.log("license created!", license.key)
-            } else {
-                console.log("license creation failed!")
-                console.log(response.status, license, await response.json());
+                console.log("creating user...")
+                const user = await createResource(`${apiBaseUrl}/users`, userBody);
+                if (user) {
+                    console.log("user created:", user.name);
+                    licenseBody.userId = user.id;
+                }
+            }
+            console.log("creating license...")
+            const license = await createResource(`${apiBaseUrl}/licenses`, licenseBody);
+            if(license) {
+                console.log("license created:", license.key);
             }
         }
     } catch (error) {

@@ -1,4 +1,4 @@
-key,allowedActivations,order_id
-9A4DB-17FD8-F399C-FF065-21523,5,12345
-31C4E-EF872-72270-C9590-2AA9E,4,12346
-134F1-E2FE7-3A50D-80F4C-61EC5,1,12347
+key,allowedActivations,order_id,email,firstName,lastName
+92A4DB-17FD8-F399C-FF065-21523,5,12345,john.doe@example.com,John,Doe
+321C4E-EF872-72270-C9590-2AA9E,4,12346,john.smith@example.com,John,Smith
+1334F1-E2FE7-3A50D-80F4C-61EC5,1,12347,john.cook@example.com,John,Cook
