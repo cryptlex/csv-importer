@@ -9,7 +9,6 @@ const productId = 'PASTE_YOUR_PRODUCT_ID';
 const csvFilePath = 'sample.csv';
 
 async function importCsv(filePath) {
-
     try {
         // read the csv file
         var csv = fs.readFileSync(filePath, 'utf8');
@@ -19,7 +18,7 @@ async function importCsv(filePath) {
             // set the productId
             license.productId = productId;
             license.metadata = [];
-            
+
             // assuming csv contains some order_id
             if (license.order_id) {
                 license.metadata.push({ key: 'order_id', value: license.order_id, visible: false });
