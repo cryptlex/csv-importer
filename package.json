@@ -1,0 +1,27 @@
+{
+  "name": "csv-importer",
+  "version": "1.0.0",
+  "description": "An example Node.js script that imports licenses into your Cryptlex account from a CSV file.",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cryptlex/csv-importer.git"
+  },
+  "keywords": [
+    "license-import",
+    "csv-importer"
+  ],
+  "author": "Cryptlex",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cryptlex/csv-importer/issues"
+  },
+  "homepage": "https://github.com/cryptlex/csv-importer#readme",
+  "dependencies": {
+    "csv-parse": "^2.2.0",
+    "node-fetch": "^2.1.2"
+  }
+}
