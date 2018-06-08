@@ -1,4 +1,4 @@
-key,allowedActivations,order_id,email,firstName,lastName
-92A4DB-17FD8-F399C-FF065-21523,5,12345,john.doe@example.com,John,Doe
-321C4E-EF872-72270-C9590-2AA9E,4,12346,john.smith@example.com,John,Smith
-1334F1-E2FE7-3A50D-80F4C-61EC5,1,12347,john.cook@example.com,John,Cook
+key,allowedActivations,validity,createdAt,order_id,email,firstName,lastName
+92A4DB-17FD8-F399C-FF065-21523,5,86500,2015-05-01 11:16:16,12345,john.doe@example.com,John,Doe
+321C4E-EF872-72270-C9590-2AA9E,4,86500,2016-06-01 12:36:56,12346,john.smith@example.com,John,Smith
+1334F1-E2FE7-3A50D-80F4C-61EC5,1,86500,2017-07-01 10:56:26,12347,john.cook@example.com,John,Cook
