@@ -35,6 +35,8 @@ async function importCsv(filePath) {
             const licenseBody = {
                 key: row.key,
                 allowedActivations: row.allowedActivations,
+                validity: row.validity,
+                createdAt: row.createdAt,
                 // add more properties if needed
                 productId: productId,
                 metadata: []
