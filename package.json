@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/cryptlex/csv-importer#readme",
   "dependencies": {
-    "csv-parse": "^2.2.0",
+    "csv-parse": "^4.4.6",
     "node-fetch": "^2.1.2",
     "uuid": "^3.3.2"
   }
