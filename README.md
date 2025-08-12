@@ -48,7 +48,7 @@ A Node.js utility to import CSV data (users, organizations, and licenses) to cry
 3. npm i
 4. Run the importer:
    ```
-   node main.js path/to/your/csv
+   node main.js
    ```
 
 The script will automatically detect the type of resource to create based on the CSV filename:

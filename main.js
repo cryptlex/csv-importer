@@ -101,7 +101,7 @@ async function createLicense(row) {
      }
     // assuming csv contains some order_id
     if (row.order_id) {
-        licenseBody.metadata.push({ key: 'order_id', value: row.order_id, visible: true });
+        licenseBody.metadata.push({ key: 'order_id', value: row.order_id, viewPermissions: ['activation'] });
     }
 
     // check for user details in csv
