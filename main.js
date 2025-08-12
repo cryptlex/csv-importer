@@ -4,9 +4,9 @@ import { parse } from 'csv-parse/sync';
 import fetch from 'node-fetch';
 import * as uuid from 'uuid';
 
-const accessToken = process.env.accessToken ||  "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6WyJsaWNlbnNlOnJlYWQiLCJsaWNlbnNlOndyaXRlIiwib3JnYW5pemF0aW9uOnJlYWQiLCJvcmdhbml6YXRpb246d3JpdGUiLCJ1c2VyOnJlYWQiLCJ1c2VyOndyaXRlIl0sInN1YiI6ImViODI2NTJlLTZiOGItNDg0Ny1iYzg5LTI4MDM5NTRjZjQyMCIsImVtYWlsIjoibXVtaW4ua2hhbkBjcnlwdGxleC5jb20iLCJqdGkiOiIwMTk4OTdmOS01NThkLTdhMTQtYTVkMi1kOWZmMmVkZGVmNjciLCJpYXQiOjE3NTQ4OTYzNTYsInRva2VuX3VzYWdlIjoicGVyc29uYWxfYWNjZXNzX3Rva2VuIiwidGVuYW50aWQiOiIwMTk4MzA1My00NDg5LTczNmQtOWU3Zi0wY2JhMjA0ZDFhZTgiLCJleHAiOjE3NTY0MDU3OTksImF1ZCI6Imh0dHBzOi8vYXBpLmRldi5jcnlwdGxleC5jb20ifQ.F6ev6_prY8wWNvf8tVvdHy3J9mu5rDjGLct7adMmHYPV-X04MgYOVjo16DZUqEKWRmkA-z4AlBoVcDL6v-KvzsVvdfaLKiZXQQP_taSH61tMYg7Pu3efKuyvpP8kB9fHkf38Dwq_MGv4wQREQkdW2VNuyNwWPuguq9Qm-ywsdVTFr0KyLMs0EOz6fi4SPvrWQGUPPh12DTuTm_Xr-SLtvolhNlV7RPKnMzhEnW6o04CqLURaRYm_WRq-7mQfHPvFuu1JSzbB6ZjhkEuhLXmEV4TsGpclTYptzxEseTtqDrQ8v5GS_soJy9NYeRUMtKIumtpKL3adU58kDwvFKFXIGQ"; // replace with your Cryptlex access token with license:read, license:write, user:read, user:write, organization:read, organization:write permissions
-const apiBaseUrl = process.env.apiBaseUrl || "https://api.dev.cryptlex.com/v3"; // for EU, use "https://api.eu.cryptlex.com/v3"
-const productId = process.env.productId || "01983053-f234-753d-ab96-b4f0d91c1514"; // replace with your product ID
+const accessToken = process.env.accessToken ||  "YOUR_ACCESS_TOKEN"; // replace with your access token
+const apiBaseUrl = process.env.apiBaseUrl || "https://api.cryptlex.com" // for eu use "https://api.eu.cryptlex.com"
+const productId = process.env.productId || "YOUR PRODUCT_ID"; // replace with your product ID
 
 const csvFilePath = 'licenses.csv'; // users.csv, organizations.csv, or licenses.csv
 
