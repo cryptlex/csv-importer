@@ -157,7 +157,7 @@ async function importCsv(filePath) {
         var csv = fs.readFileSync(filePath, 'utf8');
         const fileName = filePath.split('/').pop();
         const rows = parse(csv, { columns: true });
-        initializeLogFile
+        initializeLogFile()
         writeLog(fileName)
         if(fileName.startsWith('organization')){
             createResources(rows, createOrganization);
