@@ -5,7 +5,7 @@ import fetch from 'node-fetch';
 import * as uuid from 'uuid';
 
 const accessToken = process.env.accessToken ||  "YOUR_ACCESS_TOKEN"; // replace with your access token
-const apiBaseUrl = process.env.apiBaseUrl || "https://api.cryptlex.com" // for eu use "https://api.eu.cryptlex.com"
+const apiBaseUrl = process.env.apiBaseUrl || "https://api.cryptlex.com/v3" // for eu use "https://api.eu.cryptlex.com"
 const productId = process.env.productId || "YOUR PRODUCT_ID"; // replace with your product ID
 
 const csvFilePath = 'licenses.csv'; // users.csv, organizations.csv, or licenses.csv
