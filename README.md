@@ -1,5 +1,5 @@
 # csv-importer
-A Node.js utility to import CSV data (users, organizations, and licenses) to cryptlex.
+A Node.js utility to import CSV data (users, organizations, and licenses) into Cryptlex.
 
 ## Features
 - Imports data from CSV files
@@ -11,7 +11,7 @@ A Node.js utility to import CSV data (users, organizations, and licenses) to cry
 ## Prerequisites
 - Node.js installed
 - Access token for API authentication
-- CSV files with appropriate data structure
+- CSV files with an appropriate data structure
 
 ## CSV File Requirements
 
@@ -46,7 +46,7 @@ A Node.js utility to import CSV data (users, organizations, and licenses) to cry
    - `ACCESS_TOKEN`: Your Cryptlex API access token
    - `API_BASE_URL`: The Cryptlex API base URL
    - `PRODUCT_ID`: The ID of the product to associate licenses with
-   - `CSV_FILE_PATH`: The path to the csv file with the data. File name should begin with organization or license or user.
+   - `CSV_FILE_PATH`: The path to the CSV file with the data. The file name should begin with organization or license, or user.
 2. Prepare your CSV file with the required fields
 3. npm i
 4. Run the importer:
