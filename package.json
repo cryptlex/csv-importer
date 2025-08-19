@@ -1,6 +1,6 @@
 {
   "name": "csv-importer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "An example Node.js script that imports licenses into your Cryptlex account from a CSV file.",
   "main": "main.js",
   "scripts": {
@@ -21,8 +21,8 @@
   },
   "homepage": "https://github.com/cryptlex/csv-importer#readme",
   "dependencies": {
-    "csv-parse": "^4.4.6",
-    "node-fetch": "^2.1.2",
-    "uuid": "^3.3.2"
+    "csv-parse": "6.1.0",
+    "node-fetch": "3.3.2",
+    "uuid": "11.1.0"
   }
 }

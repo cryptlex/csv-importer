@@ -1,41 +1,121 @@
-const fs = require('fs');
-const uuid = require('uuid');
-const parse = require('csv-parse/lib/sync')
-const fetch = require('node-fetch')
+// Import required modules
+import fs from 'fs';
+import { parse } from 'csv-parse/sync';
+import fetch from 'node-fetch';
+import * as uuid from 'uuid';
 
-const accessToken = 'process.env.ACCESS_TOKEN'
-const apiBaseUrl = "https://api.cryptlex.com/v3";
-const productId = 'PASTE_YOUR_PRODUCT_ID';
+const accessToken = process.env.accessToken ||  "YOUR_ACCESS_TOKEN"; // replace with your access token
+const apiBaseUrl = process.env.apiBaseUrl || "https://api.cryptlex.com/v3" // for eu use "https://api.eu.cryptlex.com/v3"
+const productId = process.env.productId || "YOUR PRODUCT_ID"; // replace with your product ID
 
-const csvFilePath = 'sample.csv';
+const csvFilePath = 'licenses.csv'; // users.csv, organizations.csv, or licenses.csv
 
-async function createUser(url, resource) {
+function writeLog(message) {
+  console.log(message);
+  fs.appendFileSync("log.txt", message + "\n");
+}
+
+function initializeLogFile() {
+  if (!fs.existsSync("log.txt")) {
+    fs.writeFileSync("log.txt", "Log file for importing resources to cryptlex\n");
+  }
+}
+
+async function createUser( row) {
     // check whether user exists
     let users = [];
-    console.log("fetching existing user...");
-    const response = await fetch(`${url}?email=${resource.email}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`
+    let userBody = {};
+    if (row.email && row.firstName && row.lastName) {
+        userBody = {
+            email: row.email,
+            firstName: row.firstName,
+            lastName: row.lastName,
+            password: uuid.v4(), // add your logic for password generation
+            roles: ['user']
         }
-    });
-    if (response.status == 200) {
-        users = await response.json();
-    } else {
-        console.error(response.status, resource, await response.json());
     }
+    else {
+        writeLog("user details not found in csv")
+        return;
+    }
+    writeLog("fetching existing user...")
+    // fetch user by email
+    users = await getResource(`${apiBaseUrl}/users?email=${row.email}`);
     if (users.length) {
-        console.log("user already exists!")
+        writeLog("user already exists!")
         return users[0];
     }
-    console.log("user not found, creating new user...")
+    writeLog("user not found, creating new user...")
     // create a new user
-    const user = await createResource(url, resource);
+    const user = await createResource(`${apiBaseUrl}/users`, userBody);
     if(user){
-        console.log("user created:", user.name);
+        writeLog("user created:", user.name);
     }
     return user;
+}
+
+async function createOrganization(row) {
+    let organizations = [];
+    let organizationBody = {};
+    if (row.name && row.email && row.allowedUsers) {
+        organizationBody = {
+            name: row.name,
+            email: row.email,
+            allowedUsers: row.allowedUsers
+        }
+    }
+    else {
+        writeLog("organization details not found in csv")
+        return;
+    }
+    organizations = await getResource(`${apiBaseUrl}/organizations?name=${row.name}`);
+    if (organizations.length) {
+        writeLog("organization already exists!")
+        return organizations[0];
+    }
+    writeLog("organization not found, creating new organization...")
+    // create a new organization
+    const organization = await createResource(`${apiBaseUrl}/organizations`, organizationBody);
+    if(organization){
+        writeLog("organization created:", organization.name);
+    }
+    return organization;
+}
+
+async function createResources(rows, createResource) {
+    for (let row of rows) {
+        await createResource(row);
+    }
+}
+
+async function createLicense(row) {
+    const licenseBody = {
+        key: row.key,
+        allowedActivations: row.allowedActivations,
+        expiresAt: row.expiresAt,
+        createdAt: row.createdAt,
+        subscriptionInterval: row.subscriptionInterval,
+        // add more properties if needed
+        productId: productId,
+        metadata: []
+     }
+    // assuming csv contains some order_id
+    if (row.order_id) {
+        licenseBody.metadata.push({ key: 'order_id', value: row.order_id, viewPermissions: ['activation'] });
+    }
+
+    // check for user details in csv
+        writeLog("creating user...")
+        const user = await createUser( row);
+        if (user) {
+            licenseBody.userId = user.id;
+        }
+    
+    writeLog("creating license...")
+    const license = await createResource(`${apiBaseUrl}/licenses`, licenseBody);
+    if(license) {
+        writeLog("license created:", license);
+    }
 }
 
 async function createResource(url, resource) {
@@ -54,51 +134,41 @@ async function createResource(url, resource) {
     }
 }
 
+async function getResource(url) {
+    const response =  await  fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+        }
+    });
+     if (response.status == 200) {
+        return await response.json();
+    } else {
+        writeLog(response.status, await response.json());
+    }
+    return [];
+}       
+
+
 async function importCsv(filePath) {
     try {
         // read the csv file
         var csv = fs.readFileSync(filePath, 'utf8');
-        // parse the csv file
+        const fileName = filePath.split('/').pop();
         const rows = parse(csv, { columns: true });
-        for (let row of rows) {
-            // set the productId
-            const licenseBody = {
-                key: row.key,
-                allowedActivations: row.allowedActivations,
-                validity: row.validity,
-                createdAt: row.createdAt,
-                // add more properties if needed
-                productId: productId,
-                metadata: []
-            }
-            // assuming csv contains some order_id
-            if (row.order_id) {
-                licenseBody.metadata.push({ key: 'order_id', value: row.order_id, visible: true });
-            }
-
-            // check for user details in csv
-            if (row.email && row.firstName && row.lastName) {
-                const userBody = {
-                    email: row.email,
-                    firstName: row.firstName,
-                    lastName: row.lastName,
-                    password: uuid.v4(), // add your logic for password generation
-                    roles: ['user']
-                }
-                console.log("creating user...")
-                const user = await createUser(`${apiBaseUrl}/users`, userBody);
-                if (user) {
-                    licenseBody.userId = user.id;
-                }
-            }
-            console.log("creating license...")
-            const license = await createResource(`${apiBaseUrl}/licenses`, licenseBody);
-            if(license) {
-                console.log("license created:", license);
-            }
+        initializeLogFile()
+        writeLog(fileName)
+        if(fileName.startsWith('organization')){
+            createResources(rows, createOrganization);
         }
+        else if (fileName.startsWith('user')){
+            createResources(rows, createUser);
+        }
+        else 
+            createResources(rows, createLicense);
     } catch (error) {
-        console.log(error);
+        writeLog(error);
     }
 }
 
