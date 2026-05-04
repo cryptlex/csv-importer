@@ -23,6 +23,6 @@
   "dependencies": {
     "csv-parse": "6.1.0",
     "node-fetch": "3.3.2",
-    "uuid": "11.1.0"
+    "uuid": "14.0.0"
   }
 }
